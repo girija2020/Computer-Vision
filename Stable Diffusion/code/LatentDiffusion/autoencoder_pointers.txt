@@ -1,0 +1,14 @@
+As I have started to code I realised selecting parameters and loss function was not easy.
+
+Some mistakes I have done which I wish you wouldn't repeat:
+1) Did not use model.eval() or torch.no_grad() for feature loss and it got me into big trouble
+as I kept running into out of cuda memory error
+
+
+Something I have learned:
+1) Tried out using a combination of L2 and Feature Loss but MSE loss wasnt the great because it 
+isn't trying to keep the context but rather it was trying to minimize the difference between
+the original image and decoded image which meant most of the data wasn't useful
+2) loss**2 . mean() vs loss.mean() ** 2 the second one worked better though it is expected that 
+the first one usually works better due to more granular details.
+3) Auto Encoders train especially fast when the layers are not deep 1 epoch almost takes 30sec-90sec
