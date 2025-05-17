@@ -6,3 +6,7 @@ Papers to read:
 * Stable Diffusion
 * 
 Code that walks you through it helping clarify concepts as you go:
+
+# summary
+# strengths and weaknesses
+# future scope
