@@ -12,3 +12,33 @@ the original image and decoded image which meant most of the data wasn't useful
 2) loss**2 . mean() vs loss.mean() ** 2 the second one worked better though it is expected that 
 the first one usually works better due to more granular details.
 3) Auto Encoders train especially fast when the layers are not deep 1 epoch almost takes 30sec-90sec
+
+AutoEncoder and checker board patterns - When using transposed convolution, checker board artifacts are usually visible.
+stride = 2 worsened these patterns
+Going back to stride = 1
+Decreasing the transposed convolution layers helped with the reconstruction
+https://distill.pub/2016/deconv-checkerboard/
+
+
+nn.Conv2d(3, 64, kernel_size=4, padding=2, stride=1), # 57x57
+            nn.ReLU(),
+            nn.MaxPool2d(2,1), # 56x56
+            nn.Conv2d(64, 128, kernel_size=4, padding=2, stride=1), # 29x29
+            nn.ReLU(),
+            nn.MaxPool2d(2,1), # 28x28
+            nn.Conv2d(128, 256, kernel_size=3, padding=0, stride=1), # 15x15
+            nn.ReLU(),
+            nn.MaxPool2d(2,1), # 14x14
+
+self.decoder = nn.Sequential(
+# nn.ConvTranspose2d(512,256, kernel_size=7, stride=1),
+# nn.ReLU(),
+# nn.ConvTranspose2d(256,128, kernel_size=3, stride = 1),
+# nn.ReLU(),
+nn.ConvTranspose2d(128,64, kernel_size=2, stride = 1),
+nn.ReLU(),
+nn.ConvTranspose2d(64, 64, kernel_size=2, stride = 1),
+# nn.ReLU(),
+nn.ConvTranspose2d(64, 3, kernel_size=2, stride = 1),
+# nn.Sigmoid()
+)

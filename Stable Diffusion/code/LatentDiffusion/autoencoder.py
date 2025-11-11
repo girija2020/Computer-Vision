@@ -95,3 +95,75 @@ for num in range(epochs):
         L += l
     print(L/nums)
         
+# import torch
+# import torch.nn as nn
+# from torchvision.models import resnet50
+# from torchvision.models import ResNet50_Weights
+# from torchvision import transforms
+# import torch.optim as optim
+# from torch.utils.data import DataLoader
+# from torch.utils.data import Dataset, random_split
+# import cv2
+# import os
+# from torch.nn.parallel import DistributedDataParallel as DDP
+
+# # without sigmoid loss - 0.109 - the man is visible loss.mean * 2
+
+# class Autoencoder(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#         self.encoder = nn.Sequential(
+#             nn.Conv2d(3, 64, kernel_size=6, padding=3, stride=2), # 57x57
+#             nn.ReLU(),
+#             nn.MaxPool2d(2,1), # 56x56
+#             nn.Conv2d(64, 128, kernel_size=4, padding=2, stride=2), # 29x29
+#             nn.ReLU(),
+#             nn.MaxPool2d(2,1), # 28x28
+#             nn.Conv2d(128, 256, kernel_size=2, padding=1, stride=2), # 15x15
+#             nn.ReLU(),
+#             nn.MaxPool2d(2,1), # 14x14
+#             nn.Conv2d(256, 512, kernel_size=2, padding=1, stride=2), # 8x8
+#             nn.ReLU(),
+#             nn.MaxPool2d(2,1) # 7x7
+#         )
+#         self.convLayer = nn.Conv2d(512, 1024, kernel_size=7, padding=0, stride=1) # 1x1
+#         self.relu = nn.ReLU()
+#         # [(input-1)stride]+kernel_size-2*padding_of_output
+#         self.decoder = nn.Sequential(
+#             nn.ConvTranspose2d(1024,512, kernel_size=7, stride=1),
+#             nn.ReLU(),
+#             nn.ConvTranspose2d(512,256, kernel_size=2, stride=2),
+#             nn.ReLU(),
+#             nn.ConvTranspose2d(256,128, kernel_size=2, stride = 2),
+#             nn.ReLU(),
+#             nn.ConvTranspose2d(128,64, kernel_size=2, stride = 2),
+#             nn.ReLU(),
+#             nn.ConvTranspose2d(64, 3, kernel_size=2, stride = 2),
+#             # nn.Sigmoid()
+#         )
+        
+#     def forward(self, img):
+#         E = self.encoder(img)
+#         E = self.convLayer(E)
+#         E = self.relu(E)
+#         D = self.decoder(E)
+#         # # print(E.shape)
+#         # batch_size, C,H,W = E.shape
+#         # fc1 = self.fc1(E.view(batch_size, -1))
+#         # # print(fc1.shape)
+#         # fc2 = self.fc2(fc1).view(batch_size, C,H,W)
+#         # D = self.decoder(fc2)
+#         # print(D.shape)
+#         return D
+
+# class FeatureLoss(nn.Module):
+#     def __init__(self, model):
+#         super().__init__()
+#         self.model = nn.Sequential(*list(model.children())[:-1])
+#         self.model.eval()
+    
+#     def forward(self, imgs, decoded_imgs):
+#         with torch.no_grad():
+#             loss = self.model(imgs) - self.model(decoded_imgs)
+#             return loss.mean()**2 
+#             # return nn.MSELoss(self.model(imgs), self.model(decoded_imgs)) #+0.0001*(imgs-decoded_imgs).mean()**2
